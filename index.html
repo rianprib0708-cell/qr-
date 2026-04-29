@@ -8,9 +8,7 @@
 body {
   margin: 0;
   overflow: hidden;
-  font-family: sans-serif;
   background: black;
-  color: white;
 }
 
 /* MATRIX */
@@ -20,54 +18,21 @@ canvas {
   left: 0;
 }
 
-/* CENTER TEXT */
+/* TEXT TENGAH (COUNTDOWN) */
 .center {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 80px;
-  color: pink;
-  text-align: center;
+  font-size: 150px; /* BESAR BANGET */
+  color: #ff4d88;
+  font-weight: bold;
+  text-shadow: 0 0 20px #ff4d88, 0 0 40px #ff4d88;
 }
 
-/* SLIDER */
-.slider {
-  display: none;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: black;
-}
-
-.slide {
-  display: none;
-  text-align: center;
-  padding-top: 80px;
-}
-
-.slide img {
-  width: 80%;
-  max-height: 400px;
-  border-radius: 20px;
-}
-
-.caption {
-  margin-top: 20px;
-  font-size: 20px;
-  color: pink;
-}
-
-/* BUTTON */
-.btn {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 10px 20px;
-  background: pink;
-  border: none;
-  border-radius: 10px;
+/* HAPPY BIRTHDAY */
+.birthday {
+  font-size: 60px;
 }
 </style>
 </head>
@@ -75,30 +40,10 @@ canvas {
 <body>
 
 <canvas id="canvas"></canvas>
-
 <div class="center" id="text">3</div>
 
-<div class="slider" id="slider">
-  <div class="slide">
-    <img src="https://via.placeholder.com/300">
-    <div class="caption">Aku sayang kamu ❤️</div>
-  </div>
-
-  <div class="slide">
-    <img src="https://via.placeholder.com/300">
-    <div class="caption">Semoga panjang umur 🎂</div>
-  </div>
-
-  <div class="slide">
-    <img src="https://via.placeholder.com/300">
-    <div class="caption">Selalu sama aku ya 💕</div>
-  </div>
-
-  <button class="btn" onclick="nextSlide()">Next</button>
-</div>
-
 <script>
-// MATRIX EFFECT
+// ===== MATRIX =====
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -106,68 +51,59 @@ canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
 
 let letters = "01❤️".split("");
-let fontSize = 14;
+let fontSize = 18;
 let columns = canvas.width / fontSize;
 let drops = [];
 
-for (let i = 0; i < columns; i++) drops[i] = 1;
+for (let i = 0; i < columns; i++) {
+  drops[i] = 1;
+}
 
 function draw() {
-  ctx.fillStyle = "rgba(0,0,0,0.05)";
+  // BACKGROUND transparan (biar trail lebih jelas)
+  ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = "#ff4d88";
+  // WARNA RAIN (LEBIH TERANG)
+  ctx.fillStyle = "#ff2d75";
   ctx.font = fontSize + "px monospace";
 
   for (let i = 0; i < drops.length; i++) {
     let text = letters[Math.floor(Math.random() * letters.length)];
     ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
-    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975)
+    if (drops[i] * fontSize > canvas.height && Math.random() > 0.95) {
       drops[i] = 0;
+    }
 
     drops[i]++;
   }
 }
-setInterval(draw, 33);
 
-// COUNTDOWN
+setInterval(draw, 40);
+
+// ===== COUNTDOWN =====
 let count = 3;
-let text = document.getElementById("text");
+let el = document.getElementById("text");
 
 let timer = setInterval(() => {
+  el.innerText = count;
   count--;
-  text.innerText = count;
-
-  if (count == 0) {
-    text.innerText = "Happy Birthday 🎉";
-  }
 
   if (count < 0) {
     clearInterval(timer);
-    text.style.display = "none";
-    document.getElementById("slider").style.display = "block";
-    showSlide(0);
+
+    el.innerText = "Happy Birthday 🎉";
+    el.classList.add("birthday");
+
+    // DELAY LEBIH LAMA
+    setTimeout(() => {
+      el.style.display = "none";
+      // nanti lanjut ke slider kamu
+    }, 3000);
   }
-}, 1000);
-
-// SLIDER
-let current = 0;
-let slides = document.getElementsByClassName("slide");
-
-function showSlide(n) {
-  for (let i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";
-  }
-  slides[n].style.display = "block";
-}
-
-function nextSlide() {
-  current++;
-  if (current >= slides.length) current = 0;
-  showSlide(current);
-}
+}, 1500); // DELAY ANGKA LEBIH LAMA
 </script>
 
 </body>
-  </html>
+</html>
