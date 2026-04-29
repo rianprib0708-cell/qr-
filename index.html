@@ -8,8 +8,8 @@
 body {
   margin: 0;
   overflow: hidden;
-  font-family: sans-serif;
   background: black;
+  font-family: sans-serif;
 }
 
 /* MATRIX */
@@ -19,47 +19,62 @@ canvas {
   left: 0;
 }
 
-/* ⭐ BINTANG BARU (LEBIH HIDUP) */
+/* 🌌 GALAXY BACKGROUND */
 .stars {
   position: fixed;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle, #000 60%, #020010 100%);
-  overflow: hidden;
   display: none;
+  overflow: hidden;
+  background: radial-gradient(circle at center, #020010, #000);
 }
 
+/* NEBULA EFFECT */
+.nebula {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,0,150,0.2), transparent 60%);
+  animation: moveNebula 20s linear infinite;
+}
+
+@keyframes moveNebula {
+  from { transform: translate(-20%, -20%); }
+  to { transform: translate(20%, 20%); }
+}
+
+/* ⭐ STARS (PARALLAX) */
 .star {
   position: absolute;
   background: white;
   border-radius: 50%;
-  box-shadow: 0 0 6px white;
-  animation: twinkle 2s infinite ease-in-out;
+  animation: twinkle infinite ease-in-out;
 }
 
 @keyframes twinkle {
-  0%,100% { opacity: 0.2; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.5); }
+  0%,100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.6); }
 }
 
-/* 🌠 BINTANG JATUH */
+/* 🌠 SHOOTING STAR PRO MAX */
 .shooting {
   position: absolute;
-  width: 2px;
-  height: 80px;
-  background: linear-gradient(white, transparent);
-  opacity: 0.8;
+  width: 3px;
+  height: 140px;
+  background: linear-gradient(white, #ff69b4, transparent);
+  border-radius: 50%;
+  box-shadow: 0 0 15px white, 0 0 30px #ff69b4;
   transform: rotate(45deg);
-  animation: shoot 1s linear forwards;
+  animation: shoot 1.2s linear forwards;
 }
 
 @keyframes shoot {
-  from {
+  0% {
     transform: translate(0,0) rotate(45deg);
     opacity: 1;
   }
-  to {
-    transform: translate(300px,300px) rotate(45deg);
+  100% {
+    transform: translate(800px,800px) rotate(45deg);
     opacity: 0;
   }
 }
@@ -82,14 +97,13 @@ canvas {
   width: 100%;
   height: 100%;
   display: none;
-  overflow: hidden;
 }
 
 .slides {
   display: flex;
   width: 100%;
   height: 100%;
-  transition: transform 0.5s ease;
+  transition: transform 0.6s ease;
 }
 
 .slide {
@@ -102,11 +116,12 @@ canvas {
   width: 80%;
   max-height: 400px;
   border-radius: 20px;
+  box-shadow: 0 0 20px #ff69b4;
 }
 
 .caption {
   font-size: 22px;
-  color: pink;
+  color: #ff69b4;
   margin-bottom: 20px;
 }
 </style>
@@ -119,7 +134,10 @@ canvas {
 </audio>
 
 <canvas id="canvas"></canvas>
-<div class="stars" id="stars"></div>
+
+<div class="stars" id="stars">
+  <div class="nebula"></div>
+</div>
 
 <div class="center" id="text">3</div>
 
@@ -127,25 +145,25 @@ canvas {
   <div class="slides" id="slides">
 
     <div class="slide">
-      <div class="caption">my istri gwh ❤️</div>
-      <img src="https://ibb.co.com/ds9pgzTs">
+      <div class="caption">my istri gwh 🫸</div>
+      <img src="https://imgur.com/a/hPiUZfB">
     </div>
 
     <div class="slide">
-      <div class="caption">my embege kiyut bngt loh ya 😍</div>
-      <img src="https://ibb.co.com/GfGS97LP">
+      <div class="caption">my embege kiyut 😏</div>
+      <img src="https://imgur.com/a/G9GHuUt">
     </div>
 
     <div class="slide">
-      <div class="caption">my kisah ❤️</div>
-      <img src="https://ibb.co.com/xt148SCn">
+      <div class="caption">ini kalo ngambek lama bngt😡</div>
+      <img src="https://imgur.com/a/lS5Mdma">
     </div>
 
   </div>
 </div>
 
 <script>
-// MUSIC
+// MUSIC FIX
 let music = document.getElementById("music");
 window.addEventListener("load", () => {
   music.play().catch(() => {
@@ -197,17 +215,17 @@ let timer = setInterval(() => {
   if (count < 0) {
     clearInterval(timer);
 
-    el.innerText = "from rian to ida";
+    el.innerText = "Happy Birthday 🎉";
 
     setTimeout(() => {
       el.style.display = "none";
-      document.getElementById("canvas").style.display = "none";
+      canvas.style.display = "none";
 
       let stars = document.getElementById("stars");
       stars.style.display = "block";
 
-      // ⭐ BINTANG HIDUP
-      for (let i = 0; i < 120; i++) {
+      // ⭐ PARALLAX STARS
+      for (let i = 0; i < 150; i++) {
         let s = document.createElement("div");
         s.className = "star";
 
@@ -223,18 +241,20 @@ let timer = setInterval(() => {
         stars.appendChild(s);
       }
 
-      // 🌠 SHOOTING STAR
+      // 🌠 SHOOTING STAR LOOP
       setInterval(() => {
         let shoot = document.createElement("div");
         shoot.className = "shooting";
 
-        shoot.style.top = Math.random() * 50 + "%";
-        shoot.style.left = Math.random() * 50 + "%";
+        shoot.style.top = Math.random() * -200 + "px";
+        shoot.style.left = Math.random() * window.innerWidth + "px";
+
+        shoot.style.animationDuration = (Math.random() + 0.8) + "s";
 
         stars.appendChild(shoot);
 
-        setTimeout(() => shoot.remove(), 1000);
-      }, 2000);
+        setTimeout(() => shoot.remove(), 1500);
+      }, 1200);
 
       document.getElementById("slider").style.display = "block";
     }, 3000);
